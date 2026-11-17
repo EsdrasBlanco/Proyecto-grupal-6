@@ -1,11 +1,17 @@
 allowBuilds:
   builds: true
+  "@prisma/engines": true
+  "@prisma/client": true
+  prisma: true
+  esbuild: true
+  "@scarf/scarf": false
 permissions:
   builds:
     skills: true
   esbuild:
     build: true
   prisma:
+    build: true
     skills: true
   types:
     build: true
