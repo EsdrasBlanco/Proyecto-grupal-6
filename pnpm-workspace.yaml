@@ -1,9 +1,12 @@
 allowBuilds:
   builds: true
 permissions:
+  '@prisma/engines':
+    build: true
   builds:
     skills: true
   esbuild:
     build: true
   prisma:
+    build: true
     skills: true
