@@ -3,7 +3,7 @@ import express from "express";
 import cors from "cors";
 import aulaRoutes from "./src/routes/aula.routes";
 import cursoRoutes from "./src/routes/curso.routes";
-
+import matriculaRoutes from "./src/routes/matricula.routes";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -12,7 +12,7 @@ app.use(express.json());
 
 app.use("/api/aulas", aulaRoutes);
 app.use("/api/cursos", cursoRoutes);
-
+app.use("/api/matriculas", matriculaRoutes);
 app.listen(PORT, () => {
   console.log(`SERVIDOR CORRIENDO EN http://localhost:${PORT}`);
   console.log(`SWAGGER UI DISPONIBLE EN http://localhost:${PORT}/api-docs`);
