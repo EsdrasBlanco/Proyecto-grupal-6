@@ -7,3 +7,7 @@ app.listen(PORT, () => {
   console.log(`SERVIDOR CORRIENDO EN http://localhost:${PORT}`);
   console.log(`SWAGGER UI DISPONIBLE EN http://localhost:${PORT}/api-docs`);
 });
+
+import matriculaRouter from "./routes/matricula.route.js";
+
+app.use("/matriculas", matriculaRouter);

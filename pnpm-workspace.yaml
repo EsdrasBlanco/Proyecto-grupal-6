@@ -7,3 +7,6 @@ permissions:
     build: true
   prisma:
     skills: true
+  types:
+    build: true
+    skills: true
