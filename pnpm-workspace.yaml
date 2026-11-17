@@ -4,14 +4,20 @@ allowBuilds:
   "@prisma/client": true
   prisma: true
   esbuild: true
-  "@scarf/scarf": false
+  "@scarf/scarf": true
 permissions:
-  '@prisma/engines':
+  "@prisma/engines":
     build: true
+    skills: true
+  "@prisma/client":
+    build: true
+    skills: true
   builds:
+    build: true
     skills: true
   esbuild:
     build: true
+    skills: true
   prisma:
     build: true
     skills: true
