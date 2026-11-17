@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { openApiSpec } from "./src/config/swagger";
+import authRouter from "./src/routes/auth.route";
 import userRoutes from "./src/routes/user.routes";
 import aulaRoutes from "./src/routes/aula.routes";
 import cursoRoutes from "./src/routes/curso.routes";
@@ -22,7 +23,8 @@ app.get("/health", (_req: Request, res: Response) => {
 // Documentación Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-// Rutas de los módulos
+// Rutas de autenticación y módulos
+app.use("/api/auth", authRouter);
 app.use("/api/users", userRoutes);
 app.use("/users", userRoutes);
 app.use("/api/aulas", aulaRoutes);
