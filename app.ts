@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { openApiSpec } from "./src/config/swagger";
+import userRoutes from "./src/routes/user.routes";
+import aulaRoutes from "./src/routes/aula.routes";
+import cursoRoutes from "./src/routes/curso.routes";
 import estudianteRouter from "./src/routes/estudiante.route";
 import docenteRouter from "./src/routes/docente.route";
 import matriculaRouter from "./src/routes/matricula.route";
@@ -19,9 +22,14 @@ app.get("/health", (_req: Request, res: Response) => {
 // Documentación Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-// Rutas principales
+// Rutas de los módulos
+app.use("/api/users", userRoutes);
+app.use("/users", userRoutes);
+app.use("/api/aulas", aulaRoutes);
+app.use("/api/cursos", cursoRoutes);
 app.use("/api/estudiantes", estudianteRouter);
 app.use("/api/docentes", docenteRouter);
+app.use("/api/matriculas", matriculaRouter);
 app.use("/matriculas", matriculaRouter);
 
 export default app;

@@ -6,3 +6,4 @@ generated
 .env.production
 .env.development
 .env.test
+.agents

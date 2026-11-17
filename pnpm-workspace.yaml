@@ -6,6 +6,8 @@ allowBuilds:
   esbuild: true
   "@scarf/scarf": false
 permissions:
+  '@prisma/engines':
+    build: true
   builds:
     skills: true
   esbuild:
