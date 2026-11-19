@@ -18,7 +18,26 @@ export async function getAllCursosModel() {
         },
       },
       aula: true,
-    },
+      matriculas: {
+        select: {
+          id: true,
+          estado: true,
+          estudiante: {
+            select: {
+              id: true,
+              documentoIdentidad: true,
+              user: {
+                select: {
+                  nombres: true,
+                  apellidos: true,
+                  ecorreo: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    }
   });
 }
 
@@ -40,8 +59,26 @@ export async function getCursoByIdModel(id: number) {
         },
       },
       aula: true,
-      matriculas: true,
-    },
+      matriculas: {
+        select: {
+          id: true,
+          estado: true,
+          estudiante: {
+            select: {
+              id: true,
+              documentoIdentidad: true,
+              user: {
+                select: {
+                  nombres: true,
+                  apellidos: true,
+                  ecorreo: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    }
   });
 }
 

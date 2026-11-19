@@ -3,6 +3,28 @@ import { prisma } from "../config/prisma";
 export async function getAllAulasModel() {
   return await prisma.aula.findMany({
     orderBy: { id: "asc" },
+    include: {
+      cursos: {
+        select: {
+          id: true,
+          nombreCurso: true,
+          horario: true,
+          duracionHoras: true,
+          docente: {
+            select: {
+              id: true,
+              especialidad: true,
+              user: {
+                select: {
+                  nombres: true,
+                  apellidos: true,
+                },
+              },
+            },
+          },
+        },
+      }
+    }
   });
 }
 
@@ -10,8 +32,27 @@ export async function getAulaByIdModel(id: number) {
   return await prisma.aula.findUnique({
     where: { id },
     include: {
-      cursos: true,
-    },
+      cursos: {
+        select: {
+          id: true,
+          nombreCurso: true,
+          horario: true,
+          duracionHoras: true,
+          docente: {
+            select: {
+              id: true,
+              especialidad: true,
+              user: {
+                select: {
+                  nombres: true,
+                  apellidos: true,
+                },
+              },
+            },
+          },
+        },
+      }
+    }
   });
 }
 
