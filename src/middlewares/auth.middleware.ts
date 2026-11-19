@@ -43,6 +43,23 @@ export const authenticate = (req: Request, res: Response, next: NextFunction): v
   }
 };
 
+/**
+ * Autenticación opcional: si llega un token válido, carga req.user;
+ * si no llega token, continúa como anónimo. Útil para /auth/register.
+ */
+export const optionalAuthenticate = (req: Request, _res: Response, next: NextFunction): void => {
+  const authHeader = req.headers.authorization;
+  if (authHeader?.startsWith("Bearer ")) {
+    try {
+      const secret = process.env.JWT_SECRET || "proyecto-6ta-semana";
+      req.user = jwt.verify(authHeader.split(" ")[1], secret) as AuthPayload;
+    } catch {
+      // token inválido: se trata como anónimo
+    }
+  }
+  next();
+};
+
 export const authorizeRoles = (...allowedRoles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     if (!req.user) {

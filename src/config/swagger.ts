@@ -99,6 +99,8 @@ export const openApiSpec = {
       },
     },
   },
+  // Todos los endpoints usan JWT por defecto (excepto /health, login y register)
+  security: [{ bearerAuth: [] }],
   tags: [
     { name: "Salud", description: "Estado del servidor" },
     { name: "Autenticación (JWT)", description: "Inicio de sesión, registro y perfil de usuario (ESTUDIANTE, DOCENTE, DIRECTOR)" },

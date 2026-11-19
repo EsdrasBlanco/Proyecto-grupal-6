@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+﻿import express, { Request, Response } from "express";
 import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import { openApiSpec } from "./src/config/swagger";
@@ -8,7 +8,7 @@ import aulaRoutes from "./src/routes/aula.routes";
 import cursoRoutes from "./src/routes/curso.routes";
 import estudianteRouter from "./src/routes/estudiante.route";
 import docenteRouter from "./src/routes/docente.route";
-import matriculaRouter from "./src/routes/matricula.route";
+import matriculaRouter from "./src/routes/matricula.routes";
 
 const app = express();
 
@@ -20,10 +20,10 @@ app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({ status: "ok" });
 });
 
-// Documentación Swagger UI
+// DocumentaciÃ³n Swagger UI
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiSpec));
 
-// Rutas de autenticación y módulos
+// Rutas de autenticaciÃ³n y mÃ³dulos
 app.use("/api/auth", authRouter);
 app.use("/api/users", userRoutes);
 app.use("/users", userRoutes);

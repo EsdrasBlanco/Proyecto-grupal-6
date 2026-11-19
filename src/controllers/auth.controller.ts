@@ -31,7 +31,10 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     const validRoles: RoleType[] = ["ESTUDIANTE", "DOCENTE", "DIRECTOR"];
-    const userRole: RoleType = validRoles.includes(rol) ? rol : "ESTUDIANTE";
+    // Solo un DIRECTOR autenticado puede asignar roles distintos de ESTUDIANTE
+    const canAssignRole = req.user?.rol === "DIRECTOR";
+    const userRole: RoleType =
+      canAssignRole && validRoles.includes(rol) ? rol : "ESTUDIANTE";
 
     const newUser = await prisma.user.create({
       data: {
