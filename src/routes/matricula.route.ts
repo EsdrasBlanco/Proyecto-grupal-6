@@ -1,6 +1,7 @@
 // src/routes/matricula.route.ts modificado por otro usuario
 // src/routes/matricula.route.ts
 import { Router } from "express";
+import { authenticate, authorizeRoles } from "../middlewares/auth.middleware";
 import {
   getMatriculasController,
   getMatriculaByIdController,
@@ -16,12 +17,29 @@ import {
 
 const matriculaRouter = Router();
 
-matriculaRouter.get("/", getMatriculasController);
-matriculaRouter.get("/aula/:aulaId", getMatriculasByAulaController);
-matriculaRouter.get("/:id", getMatriculaByIdController);
-matriculaRouter.post("/", validateCreateMatricula, createMatriculaController);
-matriculaRouter.patch("/:id", validateUpdateMatricula, updateMatriculaController);
-matriculaRouter.delete("/:id", deleteMatriculaController);
+matriculaRouter.get( "/",              authenticate,
+  authorizeRoles("ESTUDIANTE", "DOCENTE", "DIRECTOR"),
+  getMatriculasController);
+
+matriculaRouter.get( "/aula/:aulaId",  authenticate,
+  authorizeRoles("ESTUDIANTE", "DOCENTE", "DIRECTOR"),
+  getMatriculasByAulaController);
+
+matriculaRouter.get( "/:id",           authenticate,
+  authorizeRoles("ESTUDIANTE", "DOCENTE", "DIRECTOR"),
+  getMatriculaByIdController);
+
+matriculaRouter.post("/",              authenticate,
+  authorizeRoles("ESTUDIANTE", "DIRECTOR"),
+  validateCreateMatricula,   createMatriculaController);
+
+matriculaRouter.patch( "/:id",         authenticate,
+  authorizeRoles("DOCENTE", "DIRECTOR"),
+  validateUpdateMatricula,   updateMatriculaController);
+
+matriculaRouter.delete( "/:id",        authenticate,
+  authorizeRoles("DIRECTOR"),
+  deleteMatriculaController);
 
 export default matriculaRouter;
 // fin - src/routes/matricula.route.ts 

@@ -74,10 +74,11 @@ export const matriculaPaths = {
     },
   },
 
-  "/api/matriculas/aula/{aulaId}": {
+ "/api/matriculas/aula/{aulaId}": {
     get: {
       tags: ["Matrículas"],
-      summary: "Listar matrículas filtradas por aula",
+      summary: "Listar matrículas filtradas por aula (Roles: ESTUDIANTE, DOCENTE, DIRECTOR)",
+      security: [{ bearerAuth: [] }],
       parameters: [
         {
           name: "aulaId",
@@ -90,28 +91,17 @@ export const matriculaPaths = {
       responses: {
         "200": {
           description: "Matrículas por aula obtenidas correctamente",
-          content: {
-            "application/json": {
-              schema: {
-                type: "object",
-                properties: {
-                  message: { type: "string", example: "Matrículas por aula obtenidas correctamente" },
-                  data: {
-                    type: "array",
-                    items: { $ref: "#/components/schemas/Matricula" },
-                  },
-                },
-              },
-            },
-          },
+          // ... (mantén tu esquema de respuesta actual)
         },
         "400": { description: "El ID del aula debe ser un número válido" },
+        "401": { description: "No autenticado" },
+        "403": { description: "Acceso denegado" },
         "404": { description: "Aula no encontrada" },
         "500": { description: "Error interno al consultar las matrículas por aula" },
       },
     },
   },
-
+  
   "/api/matriculas/{id}": {
     get: {
       tags: ["Matrículas"],
