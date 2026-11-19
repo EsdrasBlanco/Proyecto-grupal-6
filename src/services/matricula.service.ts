@@ -1,65 +1,26 @@
-// src/services/matricula.service.ts)
-import { prisma } from "../config/prisma";
-
-type EstadoMatricula =
-  | "INSCRITO"
-  | "APROBADO"
-  | "REPROBADO"
-  | "RETIRADO";
-
-interface CreateMatriculaInput {
-  estudianteId: number;
-  cursoId: number;
-}
-
-interface UpdateMatriculaInput {
-  calificacionFinal?: number;
-  estado?: EstadoMatricula;
-}
+// src/services/matricula.service.ts 
+import {
+  findAulaById,
+  findMatriculasByAulaId,
+  findAllMatriculas,
+  findMatriculaById,
+  findEstudianteById,
+  findCursoWithAulaById,
+  findMatriculaByEstudianteAndCurso,
+  countInscritosByCurso,
+  insertMatricula,
+  updateMatriculaById,
+  deleteMatriculaById,
+  type CreateMatriculaData,
+  type UpdateMatriculaData,
+} from "../models/matricula.model";
 
 export const getAllMatriculas = async () => {
-  return await prisma.matricula.findMany({
-    include: {
-      estudiante: {
-        include: {
-          user: {
-            select: {
-              nombres: true,
-              apellidos: true,
-              ecorreo: true,
-            },
-          },
-        },
-      },
-      curso: {
-        select: {
-          nombreCurso: true,
-          horario: true,
-        },
-      },
-    },
-    orderBy: { id: "asc" },
-  });
+  return await findAllMatriculas();
 };
 
 export const getMatriculaById = async (id: number) => {
-  const matricula = await prisma.matricula.findUnique({
-    where: { id },
-    include: {
-      estudiante: {
-        include: {
-          user: {
-            select: {
-              nombres: true,
-              apellidos: true,
-              ecorreo: true,
-            },
-          },
-        },
-      },
-      curso: true,
-    },
-  });
+  const matricula = await findMatriculaById(id);
 
   if (!matricula) {
     throw new Error("Matrícula no encontrada");
@@ -68,15 +29,12 @@ export const getMatriculaById = async (id: number) => {
   return matricula;
 };
 
-export const createMatricula = async (data: CreateMatriculaInput) => {
+export const createMatricula = async (data: CreateMatriculaData) => {
   const { estudianteId, cursoId } = data;
 
   const [estudiante, curso] = await Promise.all([
-    prisma.estudiante.findUnique({ where: { id: estudianteId } }),
-    prisma.curso.findUnique({
-      where: { id: cursoId },
-      include: { aula: true },
-    }),
+    findEstudianteById(estudianteId),
+    findCursoWithAulaById(cursoId),
   ]);
 
   if (!estudiante) {
@@ -87,61 +45,55 @@ export const createMatricula = async (data: CreateMatriculaInput) => {
     throw new Error("El curso no existe");
   }
 
-  const yaMatriculado = await prisma.matricula.findUnique({
-    where: {
-      estudianteId_cursoId: { estudianteId, cursoId },
-    },
-  });
+  const yaMatriculado = await findMatriculaByEstudianteAndCurso(
+    estudianteId,
+    cursoId
+  );
 
   if (yaMatriculado) {
     throw new Error("El estudiante ya se encuentra matriculado en este curso");
   }
 
-  const inscritos = await prisma.matricula.count({
-    where: { cursoId, estado: "INSCRITO" },
-  });
+  const inscritos = await countInscritosByCurso(cursoId);
 
   if (inscritos >= curso.aula.capacidad) {
     throw new Error("El curso ya alcanzó la capacidad máxima del aula");
   }
 
-  return await prisma.matricula.create({
-    data: {
-      estudianteId,
-      cursoId,
-    },
-  });
+  return await insertMatricula({ estudianteId, cursoId });
 };
 
 export const updateMatricula = async (
   id: number,
-  data: UpdateMatriculaInput
+  data: UpdateMatriculaData
 ) => {
-  const existe = await prisma.matricula.findUnique({ where: { id } });
+  const existe = await findMatriculaById(id);
 
   if (!existe) {
     throw new Error("Matrícula no encontrada");
   }
 
-  return await prisma.matricula.update({
-    where: { id },
-    data: {
-      ...(data.calificacionFinal !== undefined && {
-        calificacionFinal: data.calificacionFinal,
-      }),
-      ...(data.estado && { estado: data.estado }),
-    },
-  });
+  return await updateMatriculaById(id, data);
 };
 
 export const deleteMatricula = async (id: number) => {
-  const existe = await prisma.matricula.findUnique({ where: { id } });
+  const existe = await findMatriculaById(id);
 
   if (!existe) {
     throw new Error("Matrícula no encontrada");
   }
 
-  return await prisma.matricula.delete({
-    where: { id },
-  });
+  return await deleteMatriculaById(id);
 };
+
+// matriculados x aula
+export const getMatriculasByAula = async (aulaId: number) => {
+  const aulaConMatriculas = await findMatriculasByAulaId(aulaId);
+
+  if (!aulaConMatriculas) {
+    throw new Error("Aula no encontrada");
+  }
+
+  return aulaConMatriculas;
+};
+// fin - src/services/matricula.service.ts 

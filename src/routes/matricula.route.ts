@@ -1,30 +1,27 @@
-import { Router, Request, Response } from "express";
-import { prisma } from "../config/prisma";
+// src/routes/matricula.route.ts modificado por otro usuario
+// src/routes/matricula.route.ts
+import { Router } from "express";
+import {
+  getMatriculasController,
+  getMatriculaByIdController,
+  getMatriculasByAulaController,
+  createMatriculaController,
+  updateMatriculaController,
+  deleteMatriculaController,
+} from "../controllers/matricula.controller";
+import {
+  validateCreateMatricula,
+  validateUpdateMatricula,
+} from "../middlewares/matricula.middleware";
 
 const matriculaRouter = Router();
 
-matriculaRouter.get("/", async (_req: Request, res: Response): Promise<void> => {
-  try {
-    const matriculas = await prisma.matricula.findMany({
-      include: {
-        estudiante: {
-          include: {
-            user: {
-              select: { id: true, nombres: true, apellidos: true, ecorreo: true },
-            },
-          },
-        },
-        curso: true,
-      },
-      orderBy: { id: "asc" },
-    });
-    res.status(200).json(matriculas);
-  } catch (error) {
-    res.status(500).json({
-      message: "Error al obtener las matrículas",
-      error: error instanceof Error ? error.message : error,
-    });
-  }
-});
+matriculaRouter.get("/", getMatriculasController);
+matriculaRouter.get("/aula/:aulaId", getMatriculasByAulaController);
+matriculaRouter.get("/:id", getMatriculaByIdController);
+matriculaRouter.post("/", validateCreateMatricula, createMatriculaController);
+matriculaRouter.patch("/:id", validateUpdateMatricula, updateMatriculaController);
+matriculaRouter.delete("/:id", deleteMatriculaController);
 
 export default matriculaRouter;
+// fin - src/routes/matricula.route.ts 
