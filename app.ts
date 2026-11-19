@@ -8,7 +8,7 @@ import aulaRoutes from "./src/routes/aula.routes";
 import cursoRoutes from "./src/routes/curso.routes";
 import estudianteRouter from "./src/routes/estudiante.route";
 import docenteRouter from "./src/routes/docente.route";
-import matriculaRouter from "./src/routes/matricula.routes";
+import matriculaRouter from "./src/routes/matricula.route";
 
 const app = express();
 
