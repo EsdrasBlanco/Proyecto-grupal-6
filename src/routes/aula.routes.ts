@@ -7,16 +7,30 @@ import {
   putAula,
 } from "../controllers/aula.controller";
 import { authenticate, authorizeRoles } from "../middlewares/auth.middleware";
+import { validateBody } from "../middlewares/validate.middleware";
+import { createAulaSchema, updateAulaSchema } from "../schemas/aula.schema";
 
 const router = Router();
 
-// Lectura: cualquier usuario autenticado
 router.get("/", authenticate, authorizeRoles("ESTUDIANTE", "DOCENTE", "DIRECTOR"), getAulas);
 router.get("/:id", authenticate, authorizeRoles("ESTUDIANTE", "DOCENTE", "DIRECTOR"), getAulaById);
 
-// Creación, cambios y eliminación: solo DIRECTOR
-router.post("/", authenticate, authorizeRoles("DIRECTOR"), createAula);
-router.put("/:id", authenticate, authorizeRoles("DIRECTOR"), putAula);
+router.post(
+  "/",
+  authenticate,
+  authorizeRoles("DIRECTOR"),
+  validateBody(createAulaSchema),
+  createAula
+);
+
+router.put(
+  "/:id",
+  authenticate,
+  authorizeRoles("DIRECTOR"),
+  validateBody(updateAulaSchema),
+  putAula
+);
+
 router.delete("/:id", authenticate, authorizeRoles("DIRECTOR"), deleteAula);
 
 export default router;

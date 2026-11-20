@@ -1,4 +1,5 @@
 // prisma/seed.ts
+import bcrypt from "bcryptjs";
 import { prisma } from "../src/config/prisma";
 
 // pnpm tsx prisma/seed.ts
@@ -9,6 +10,8 @@ import { prisma } from "../src/config/prisma";
 // Estudiantes y Matrículas: 90 estudiantes y 90 matrículas (15 por cada una de las 6 aulas).
 
 async function main() {
+  const defaultPassword = await bcrypt.hash("pas123", 10);
+
   // 1. Crear 1 usuario Director
   console.log("Creando 1 Director y 9 Docentes...");
   const director = await prisma.user.create({
@@ -16,7 +19,7 @@ async function main() {
       nombres: "Carlos",
       apellidos: "Mendoza",
       ecorreo: "director@academia.edu",
-      password: "pas123",
+      password: defaultPassword,
       telefono: "987654321",
       rol: "DIRECTOR",
     },
@@ -31,7 +34,7 @@ async function main() {
           nombres: "Laura",
           apellidos: "Gómez",
           ecorreo: "laura@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -46,7 +49,7 @@ async function main() {
           nombres: "Roberto",
           apellidos: "Silva",
           ecorreo: "roberto@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -61,7 +64,7 @@ async function main() {
           nombres: "Elena",
           apellidos: "Rojas",
           ecorreo: "elena@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -76,7 +79,7 @@ async function main() {
           nombres: "Marcos",
           apellidos: "Castro",
           ecorreo: "marcos@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -91,7 +94,7 @@ async function main() {
           nombres: "Patricia",
           apellidos: "Morales",
           ecorreo: "patricia@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -106,7 +109,7 @@ async function main() {
           nombres: "Fernando",
           apellidos: "Ortiz",
           ecorreo: "fernando@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -121,7 +124,7 @@ async function main() {
           nombres: "Gabriela",
           apellidos: "Navarro",
           ecorreo: "gabriela@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -136,7 +139,7 @@ async function main() {
           nombres: "Ricardo",
           apellidos: "Paredes",
           ecorreo: "ricardo@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -151,7 +154,7 @@ async function main() {
           nombres: "Valeria",
           apellidos: "Campos",
           ecorreo: "valeria@academia.edu",
-          password: "pas123",
+          password: defaultPassword,
           rol: "DOCENTE",
         },
       },
@@ -310,7 +313,7 @@ async function main() {
               nombres: nombresBase[j],
               apellidos: `${apellidosBase[j]} (A${i + 1})`,
               ecorreo: correo,
-              password: "pas123",
+              password: defaultPassword,
               rol: "ESTUDIANTE",
             },
           },
