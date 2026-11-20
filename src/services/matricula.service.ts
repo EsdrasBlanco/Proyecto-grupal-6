@@ -1,6 +1,5 @@
 // src/services/matricula.service.ts 
 import {
-  findAulaById,
   findMatriculasByAulaId,
   findAllMatriculas,
   findMatriculaById,

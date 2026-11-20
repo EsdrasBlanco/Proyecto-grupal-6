@@ -1,7 +1,7 @@
 // src/schemas/matricula.schema.ts
 import { z } from "zod";
 
-export const createMatriculaSchema = z.object({
+export const createMatriculaSchema = z.strictObject({
   estudianteId: z
     .number({ message: "El ID del estudiante debe ser un número" })
     .int("El ID del estudiante debe ser entero")
@@ -12,7 +12,7 @@ export const createMatriculaSchema = z.object({
     .positive("El ID del curso debe ser positivo"),
 });
 
-export const updateMatriculaSchema = z.object({
+export const updateMatriculaSchema = z.strictObject({
   calificacionFinal: z
     .number({ message: "La calificación debe ser un número" })
     .min(0, "La calificación mínima es 0")
@@ -24,3 +24,4 @@ export const updateMatriculaSchema = z.object({
     })
     .optional(),
 });
+// fin - src/schemas/matricula.schema.ts
